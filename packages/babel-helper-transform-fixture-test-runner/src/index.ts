@@ -646,6 +646,10 @@ export type ProcessTestOpts = {
   minNodeVersion?: number;
   env?: Record<string, string>;
   BABEL_8_BREAKING?: boolean;
+  // Opt a fixture out of Windows: some `--watch` fixtures trip a libuv
+  // assertion on win32 (`!_wcsnicmp(filename, dir, dirlen)`, src/win/fs-event.c:72)
+  // which aborts the whole test process rather than failing a single test.
+  skipWindows?: boolean;
 };
 
 export type ProcessTest = {
@@ -889,6 +893,7 @@ export function buildProcessTests(
       const skip =
         (opts.minNodeVersion &&
           parseInt(process.versions.node, 10) < opts.minNodeVersion) ||
+        (opts.skipWindows && process.platform === "win32") ||
         (process.env.BABEL_8_BREAKING
           ? opts.BABEL_8_BREAKING === false
           : opts.BABEL_8_BREAKING === true);

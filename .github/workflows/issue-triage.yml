@@ -1,8 +1,7 @@
 name: Issue Triage
 
 on:
-  issues:
-    types: [opened, labeled]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,6 +10,7 @@ jobs:
   welcome:
     name: Welcome comment
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Check if Babel member
         id: is_babel_member
@@ -43,6 +43,7 @@ jobs:
   needs_info:
     name: Needs Info
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Create Needs Info Comment
         uses: babel/actions/create-comment@v2
@@ -85,6 +86,7 @@ jobs:
   npm_cache:
     name: Npm Cache
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Npm Cache Comment
         uses: babel/actions/create-comment@v2

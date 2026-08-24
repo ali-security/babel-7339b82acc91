@@ -1,8 +1,7 @@
 name: Lock Threads
 
 on:
-  schedule:
-    - cron: '0 4 * * *'
+  workflow_dispatch:
 
 permissions: {}
 
@@ -12,6 +11,7 @@ jobs:
       issues: write  # for dessant/lock-threads to lock issues
       pull-requests: write  # for dessant/lock-threads to lock PRs
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: dessant/lock-threads@v4
         with:

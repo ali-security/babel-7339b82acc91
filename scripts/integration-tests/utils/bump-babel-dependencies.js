@@ -1,6 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 
+// Seal: the `latest` dist-tag now resolves to Babel 8, whose `lib/` is ESM and
+// cannot be parsed by the Node 6/8/10 CI legs. Those legs set BABEL_DEP_VERSION
+// to an explicit 7.x range to get the CommonJS builds upstream resolved.
+const targetVersion = process.env.BABEL_DEP_VERSION || "latest";
+
 const packageJSONPath = path.resolve(process.cwd(), "./package.json");
 const content = (await import(packageJSONPath, { with: { type: "json" } }))
   .default;
@@ -29,10 +34,10 @@ if (process.argv[2] === "resolutions") {
     bumpBabelDependency("peerDependencies", "*");
   }
   if ("devDependencies" in content) {
-    bumpBabelDependency("devDependencies", "latest");
+    bumpBabelDependency("devDependencies", targetVersion);
   }
   if ("dependencies" in content) {
-    bumpBabelDependency("dependencies", "latest");
+    bumpBabelDependency("dependencies", targetVersion);
   }
 }
 
